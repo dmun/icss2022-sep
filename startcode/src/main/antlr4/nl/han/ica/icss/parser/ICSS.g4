@@ -17,7 +17,11 @@ selector   : LOWER_IDENT | ID_IDENT | CLASS_IDENT;
 
 declaration   : property_name COLON expression SEMICOLON | if_clause;
 property_name : 'color' | 'background-color' | 'width' | 'height';
-expression    : literal | variable_name;
+expression    : operation | literal | variable_name;
+
+operation : operation mul operation | operation add_sub operation | literal | variable_name;
+mul       : MUL;
+add_sub   : PLUS | MIN;
 
 //--- LEXER: ---
 
