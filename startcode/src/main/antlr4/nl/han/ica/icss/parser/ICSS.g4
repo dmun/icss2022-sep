@@ -10,14 +10,14 @@ variable_assignment : variable_name ASSIGNMENT_OPERATOR variable_expression SEMI
 variable_name       : CAPITAL_IDENT;
 variable_expression : literal | variable_name;
 
-literal : TRUE | FALSE | PIXELSIZE | PERCENTAGE | SCALAR | COLOR;
+literal : TRUE | FALSE | PIXELSIZE | PERCENTAGE | SCALAR | COLOR | variable_name;
 
 style_rule : selector OPEN_BRACE declaration* CLOSE_BRACE;
 selector   : LOWER_IDENT | ID_IDENT | CLASS_IDENT;
 
 declaration   : property_name COLON expression SEMICOLON | if_clause;
 property_name : 'color' | 'background-color' | 'width' | 'height';
-expression    : operation | literal | variable_name;
+expression    : literal | expression mul expression | expression add_sub expression ;
 
 operation : operation mul operation | operation add_sub operation | literal | variable_name;
 mul       : MUL;
