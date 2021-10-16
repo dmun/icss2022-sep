@@ -46,6 +46,30 @@ public class ASTListener extends ICSSBaseListener {
 	}
 
 	@Override
+	public void enterVariable_assignment(ICSSParser.Variable_assignmentContext ctx) {
+		var variableAssignment = new VariableAssignment();
+		currentContainer.push(variableAssignment);
+	}
+
+	@Override
+	public void exitVariable_assignment(ICSSParser.Variable_assignmentContext ctx) {
+		var variableAssignment = currentContainer.pop();
+		currentContainer.peek().addChild(variableAssignment);
+	}
+
+	@Override
+	public void enterVariable_name(ICSSParser.Variable_nameContext ctx) {
+		var variableName = new VariableReference(ctx.getText());
+		currentContainer.push(variableName);
+	}
+
+	@Override
+	public void exitVariable_name(ICSSParser.Variable_nameContext ctx) {
+		var variableName = currentContainer.pop();
+		currentContainer.peek().addChild(variableName);
+	}
+
+	@Override
 	public void enterStyle_rule(ICSSParser.Style_ruleContext ctx) {
 		var styleRule = new Stylerule();
 		currentContainer.push(styleRule);
@@ -115,6 +139,8 @@ public class ASTListener extends ICSSBaseListener {
 			literal = new PixelLiteral(text);
 		} else if (text.endsWith("%")) {
 			literal = new PercentageLiteral(text);
+		} else if (text.equals("TRUE") || text.equals("FALSE")) {
+			literal = new BoolLiteral(text);
 		} else {
 			literal = new ScalarLiteral(text);
 		}
